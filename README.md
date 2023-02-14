@@ -42,8 +42,9 @@ export default BlogId;
 <Image src='/nature.jpg' width={500} height={300}></Image>
 ```  
 #### Configure DaisyUi and load data using get static props  
+Folder structure : Posts => index.js(component name Posts) => Post.js => [postId].js (component name PostDetails)
 ```js
-// Data fetching in next js 
+// Data fetching in index.js
 export const getStaticProps = async() =>{
      const res = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=10");
      const data = await res.json();
@@ -53,8 +54,7 @@ export const getStaticProps = async() =>{
         }
      }
 }
-
-// Data as props accessing 
+// Data as props accessing in index.js
 import Post from "Components/Post/Post";
 const Posts = ({posts}) => {
     return (
@@ -67,4 +67,55 @@ const Posts = ({posts}) => {
     );
 };
 export default Posts;
+// Showed data in Post.js
+<div className="card bg-base-100 shadow-xl mt-10">
+  <div className="card-body">
+    <h2 className="card-title">Card title!</h2>
+    <div className="card-actions justify-end">
+      <Link href={`/posts/${post?.id}`}>
+      <button className="btn btn-primary">See Details</button>
+      </Link>
+    </div>
+  </div>
+```     
+#### Dynamic parameters and dynamically load data using get static path in route [postId].js
+Folder structure : Posts => index.js(component name Posts) => Post.js => [postId].js (component name PostDetails)
+```js
+// getting dynamic id [postId].js
+export const getStaticPaths =  async() =>{
+    const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const posts = res.json();
+    const paths = posts.map(post =>{
+        return {
+            params : {
+                postId : `${post.id}`
+            }
+        }
+    })
+    return {
+        paths ,
+        fallback: false
+    }
+}
+// fetching dynamic data by id [postId].js
+export const getStaticProps = async(context) =>{
+    const {params} = context;
+    const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${params?.postId}`);
+    const data = await res.json();
+    return {
+       props: {
+           post: data
+       }
+    }
+}
+// route by id from Post.js  
+<Link href={`/posts/${post?.id}`}>
+<button className="btn btn-primary">See Details</button>
+</Link>
+// return back to Post.js from [postId].js 
+ const router = useRouter();
+const handleBack = () =>{
+router.push("/posts")
+    }
+
 ```  
