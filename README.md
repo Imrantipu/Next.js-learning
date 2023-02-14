@@ -42,7 +42,7 @@ export default BlogId;
 <Image src='/nature.jpg' width={500} height={300}></Image>
 ```  
 #### Configure DaisyUi and load data using get static props  
-Folder structure : Posts => index.js(component name Posts) => Post.js => [postId].js (component name PostDetails)
+Folder structure : Pages => Posts => index.js(component name Posts) => Post.js => [postId].js (component name PostDetails)
 ```js
 // Data fetching in index.js
 export const getStaticProps = async() =>{
@@ -79,7 +79,7 @@ export default Posts;
   </div>
 ```     
 #### Dynamic parameters and dynamically load data using get static path in route [postId].js
-Folder structure : Posts => index.js(component name Posts) => Post.js => [postId].js (component name PostDetails)
+Folder structure : Pages => Posts => index.js(component name Posts) => Post.js => [postId].js (component name PostDetails)
 ```js
 // getting dynamic id [postId].js
 export const getStaticPaths =  async() =>{
@@ -117,5 +117,16 @@ export const getStaticProps = async(context) =>{
 const handleBack = () =>{
 router.push("/posts")
     }
-
+```  
+#### Exploring SSR(server side rendering) using get server side props by user request   
+```js
+export const getServerSideProps = async () =>{
+  const res = await fetch("https://jsonplaceholder.typicode.com/comments");
+  const data = await res.json();
+  return {
+    props: {
+        comments: data
+    }
+  }
+}
 ```  
