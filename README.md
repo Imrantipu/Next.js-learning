@@ -130,3 +130,16 @@ export const getServerSideProps = async () =>{
   }
 }
 ```  
+#### Difference between Pages and Components in Next.JS and explore built in css support  
+Components will be called in index.js from pages folder  
+```js
+// CSS styles for specific page , class name is .box in News.module.css
+import styles from "/styles/News.module.css"
+const News = () => {
+    return (
+        <div className ={styles.box}>
+        <h1>This is news page</h1>
+        </div>
+    )
+} 
+```  
